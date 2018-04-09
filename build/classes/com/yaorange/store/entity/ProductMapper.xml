@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 配置命名空间，区别名称 -->
+<mapper namespace="com.yaorange.store.dao.ProductDao">
+	<!-- SQL片段 -->
+	<sql id="basecols">pid,pname,market_price, shop_price,pimage, pdate, is_hot,
+		pdesc,pflag,cid
+	</sql>
+
+
+	<select id="findHotList" resultType="Product">
+		select
+		<include refid="basecols" />
+		from product where is_hot = 1 limit 0,10
+	</select>
+	<select id="findNewList" resultType="Product">
+		select
+		<include refid="basecols" />
+		from product order by pdate desc limit 0,10
+	</select>
+
+	<select id="getTotalCountByCid" resultType="int" parameterType="string">
+		select
+		count(pid)
+		from product where cid = #{cid}
+	</select>
+
+	<select id="getTotalCount" resultType="int" parameterType="int">
+		select
+		count(pid)
+		from product
+		<where>
+			<if test="value!=null">
+				and pflag=#{pflag}
+			</if>
+		</where>
+	</select>
+
+	<select id="findListByCid" resultType="Product" parameterType="map">
+		select
+		<include refid="basecols" />
+		from product where cid = #{cid} limit #{beginRows},#{pageSize}
+	</select>
+	<select id="findList" resultType="Product" parameterType="map">
+		select
+		<include refid="basecols" />
+		from product
+		<where>
+			<if test="pflag!=null">
+				and pflag=#{pflag}
+			</if>
+		</where>
+		limit #{beginRows},#{pageSize}
+	</select>
+	<select id="findById" resultType="Product" parameterType="string">
+		select
+		<include refid="basecols" />
+		from product where pid = #{pid}
+	</select>
+
+
+	<insert id="save" parameterType="Product">
+		insert into
+		product
+		(
+		pid,pname,market_price, shop_price,pimage, pdate,
+		is_hot,pdesc,pflag,cid
+		)
+		values
+		(#{pid},#{pname},#{market_price},
+		#{shop_price},#{pimage}, #{pdate},
+		#{is_hot},
+		#{pdesc},#{pflag},#{cid}
+		)
+	</insert>
+
+	<update id="update" parameterType="Product">
+		update product set
+		pname=#{pname},market_price=#{market_price},
+		shop_price=#{shop_price},pimage=#{pimage},
+		is_hot=#{is_hot},pdesc=#{pdesc},cid=#{cid} where pid = #{pid}
+	</update>
+
+
+	<update id="updateState" parameterType="Product">
+		update product set
+		pflag=#{pflag} where pid = #{pid}
+	</update>
+</mapper>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 配置命名空间，区别名称 -->
+<mapper namespace="com.yaorange.store.dao.CategoryDao">
+	<!-- SQL片段-->
+	 <sql id="basecols">cid,cname</sql> 
+
+	<!-- 中间，对象的属性和结果集的字段之间的对应关系 -->
+	<resultMap type="Category" id="categoryRM">
+		<!-- 主键映射 -->
+		<id property="cid" column="cid" />
+		<!-- 普通字段 property指实体的属性；column结果集的字段名称 -->
+		<result property="cname" column="cname" />
+		
+	</resultMap>
+	
+	<select id="findAll" resultMap="categoryRM">
+		select <include refid="basecols"/> from category
+	</select>
+	
+	<insert id="save" parameterType="Category">
+		insert into category (cid,cname) values(#{cid},#{cname})
+	</insert>
+	
+	<select id="findById" resultMap="categoryRM" parameterType="string">
+		select <include refid="basecols"/> from category where cid = #{cid}
+	</select>
+	
+	<update id="update" parameterType="Category">
+		update category set cname=#{cname} where cid=#{cid}
+	</update>
+	
+	<delete id="delete" parameterType="string">
+		delete from category where cid=#{cid}
+	</delete>
+</mapper>

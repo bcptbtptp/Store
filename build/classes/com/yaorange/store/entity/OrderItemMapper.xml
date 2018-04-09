@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 配置命名空间，区别名称 -->
+<mapper namespace="com.yaorange.store.dao.OrderItemDao">
+	<!-- SQL片段 -->
+	<sql id="basecols">
+		itemid,
+		count,
+		subtotal,
+		pid,
+		oid
+	</sql>
+
+
+	<insert id="save" parameterType="OrderItem">
+		insert into
+		orderitem (
+		itemid,
+		count,
+		subtotal,
+		pid,
+		oid)
+		values
+		(
+		#{itemid},
+		#{count},
+		#{subtotal},
+		#{pid},
+		#{oid}
+		)
+
+	</insert>
+
+</mapper>

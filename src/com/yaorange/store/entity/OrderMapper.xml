@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 配置命名空间，区别名称 -->
+<mapper namespace="com.yaorange.store.dao.OrderDao">
+	<!-- SQL片段 -->
+	<sql id="basecols">
+		oid,
+		ordertime,
+		total,
+		state,
+		address,
+		name,
+		telephone,
+		uid
+	</sql>
+
+
+
+	<resultMap type="Order" id="orderMap">
+		<id property="oid" column="oid" />
+		<result property="ordertime" column="ordertime" />
+		<result property="total" column="total" />
+		<result property="state" column="state" />
+		<result property="address" column="address" />
+		<result property="name" column="name" />
+		<result property="telephone" column="telephone" />
+		<result property="uid" column="uid" />
+		<collection property="orderItems" ofType="OrderItem">
+			<id property="itemid" column="itemid" />
+			<result property="count" column="count" />
+			<result property="subtotal" column="subtotal" />
+			<result property="pid" column="pid" />
+			<association property="product" javaType="Product">
+				<id property="pid" column="pid" />
+				<result property="pname" column="pname" />
+				<result property="shop_price" column="shop_price" />
+				<result property="pimage" column="pimage" />
+			</association>
+		</collection>
+	</resultMap>
+
+	<insert id="save" parameterType="OrderItem">
+		insert into
+		orders (
+		oid,
+		ordertime,
+		total,
+		state,
+		address,
+		name,
+		telephone,
+		uid
+		)
+		values
+		(
+		#{oid},
+		#{ordertime},
+		#{total},
+		#{state},
+		#{address},
+		#{name},
+		#{telephone},
+		#{uid}
+		)
+	</insert>
+
+	<select id="getTotalCount" resultType="int" parameterType="string">
+		select count(oid) from orders where uid = #{uid}
+	</select>
+
+
+	<select id="findListByUid" resultMap="orderMap" parameterType="map">
+		SELECT
+		o.*, oi.itemid,
+		oi.count,
+		oi.subtotal,
+		oi.pid,
+		p.pname,
+		p.pimage,
+		p.shop_price
+		FROM
+		(select * from orders o1 WHERE
+		o1.uid = #{uid} limit
+		#{beginRows},#{pageSize}) o
+		LEFT JOIN orderitem oi
+		ON o.oid = oi.oid
+		join product p on oi.pid = p.pid
+
+	</select>
+
+
+	<update id="updateState" parameterType="string">
+		update orders set state = 1 where oid = #{oid}
+	</update>
+	
+	
+	<select id="findByOid" parameterType="string" resultMap="orderMap">
+		SELECT
+		o.*, oi.itemid,
+		oi.count,
+		oi.subtotal,
+		oi.pid,
+		p.pname,
+		p.pimage,
+		p.shop_price
+		FROM
+		(select * from orders o1 WHERE
+		o1.oid = #{oid} ) o
+		LEFT JOIN orderitem oi
+		ON o.oid = oi.oid
+		join product p on oi.pid = p.pid
+	</select>
+</mapper>

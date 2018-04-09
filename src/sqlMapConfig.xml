@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+	<!-- 起别名 -->
+	<typeAliases>
+		<typeAlias type="com.yaorange.store.entity.User" alias="User"/>
+		<typeAlias type="com.yaorange.store.entity.Category" alias="Category"/>
+		<typeAlias type="com.yaorange.store.entity.Product" alias="Product"/>
+		<typeAlias type="com.yaorange.store.entity.OrderItem" alias="OrderItem"/>
+		<typeAlias type="com.yaorange.store.entity.Order" alias="Order"/>
+	</typeAliases>
+	
+	<!-- 配置数据源，事务 -->
+	<environments default="test">
+		<environment id="test">
+			<!-- 事务：JDBC/MANAGED-自己管理去 -->
+			<transactionManager type="JDBC"/>
+			<!-- 数据源：POOLED/UNPOOLED/JNDI -->
+			<dataSource type="POOLED">
+				<property name="driver" value="com.mysql.jdbc.Driver"/>
+				<property name="url" value="jdbc:mysql://localhost:3306/store?useUnicode=true&amp;characterEncoding=utf-8"/>
+				<property name="username" value="root"/>
+				<property name="password" value="root"/>
+			</dataSource>
+		</environment>
+
+		<environment id="deploy">
+			<!-- 事务：JDBC/MANAGED-自己管理去 -->
+			<transactionManager type="JDBC"/>
+			<!-- 数据源：POOLED/UNPOOLED/JNDI -->
+			<dataSource type="POOLED">
+				<property name="driver" value="com.mysql.jdbc.Driver"/>
+				<property name="url" value="jdbc:mysql://127.0.0.1:3306/mybatis?charsetEncoding=utf8"/>
+				<property name="username" value="root"/>
+				<property name="password" value="root"/>
+			</dataSource>
+		</environment>
+	</environments>
+	
+	<!-- 映射文件mapper -->
+	<mappers>
+		<mapper resource="com/yaorange/store/entity/UserMapper.xml"/>
+		<mapper resource="com/yaorange/store/entity/CategoryMapper.xml"/>
+		<mapper resource="com/yaorange/store/entity/ProductMapper.xml"/>
+		<mapper resource="com/yaorange/store/entity/OrderItemMapper.xml"/>
+		<mapper resource="com/yaorange/store/entity/OrderMapper.xml"/>
+	</mappers>
+	
+	
+</configuration>
